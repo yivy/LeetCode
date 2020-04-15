@@ -53,6 +53,58 @@
  */
 public class S8_myAtoi {
     public int myAtoi(String str) {
+        int i=0;
+        int t=0;
+        //判断是否是负数
+        int state = 0;
+        boolean isFirstEmpty = false;
+        boolean isStartNum = false;
+        while (i<str.length()){
+            if(str.charAt(i)==' '){
+                if(!isFirstEmpty){
+                    i++;
+                    continue;
+                }else{
+                    break;
+                }
+            }
+            isFirstEmpty = true;
+            if(Character.isDigit(str.charAt(i))){
+                isStartNum = true;
+                if(state ==1){
+                    if (-t < Integer.MIN_VALUE/10 || (-t == Integer.MIN_VALUE / 10 && -(str.charAt(i)-'0') < -8)) return Integer.MIN_VALUE;
+                }else if(state ==2 || state==0){
+                    if (t > Integer.MAX_VALUE/10 || (t == Integer.MAX_VALUE / 10 && (str.charAt(i)-'0') > 7)) return Integer.MAX_VALUE;
+                }
+                t=t*10+(str.charAt(i)-'0');
+            }else{
+                if(str.charAt(i)=='-' && state==0 && !isStartNum){
+                    state =1;
+                }else if(str.charAt(i)=='+' && state==0 && !isStartNum){
+                    state =2;
+                }else{
+                    break;
+                }
+            }
+            i++;
+        }
+        if(state==1){
+            return -t;
+        }else {
+            return t;
+        }
+    }
+
+    public static void main(String[] args) {
+        S8_myAtoi s8_myAtoi = new S8_myAtoi();
+        System.out.println(s8_myAtoi.myAtoi("419 3 with words"));
+        System.out.println(s8_myAtoi.myAtoi("words and 987"));
+        System.out.println(s8_myAtoi.myAtoi("-91283472332"));
+        System.out.println(s8_myAtoi.myAtoi("+1"));
+        System.out.println(s8_myAtoi.myAtoi("+-1"));
+        System.out.println(s8_myAtoi.myAtoi("2147483646"));
+        System.out.println(s8_myAtoi.myAtoi("-2147483649"));
+        System.out.println(s8_myAtoi.myAtoi("0-1"));
 
     }
 }
